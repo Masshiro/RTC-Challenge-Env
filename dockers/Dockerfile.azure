@@ -1,3 +1,4 @@
+# FROM alphartc:latest
 FROM alphartc:latest
 
 # Add ONL user
@@ -6,8 +7,22 @@ ARG USER=onl
 WORKDIR /home/${USER}
 
 # Install dependency
-RUN apt-get update && apt-get install -y \
-    ffmpeg python3-pip wget unzip gocr imagemagick
+ENV DEBIAN_FRONTEND=noninteractive
+RUN ln -fs /usr/share/zoneinfo/America/Vancouver /etc/localtime && \
+    echo "America/Vancouver" > /etc/timezone && \
+    apt-get update && apt-get install -y \
+    ffmpeg \
+    python3-pip \
+    wget \
+    unzip \
+    gocr \
+    imagemagick \
+    sudo \
+    curl \
+    mahimahi \
+    tzdata \
+    iputils-ping \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install pytest numpy requests soundfile
 
@@ -25,5 +40,5 @@ RUN pip3 install torch
 #Protobuf
 RUN pip3 install protobuf==3.6.1
 # TensorFlow
-RUN pip3 install tensorflow==1.8.0
+# RUN pip3 install tensorflow==1.8.0
 
